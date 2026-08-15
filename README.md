@@ -6,7 +6,7 @@ The project is adapted from the Three.js CSS3D Periodic Table example. The origi
 
 ## Live Website
 
-[View the Wealth Data Explorer](https://JiaShin19.github.io/wealth-data-explorer/)
+[View the Wealth Data Explorer](https://jiashin19.github.io/wealth-data-explorer/)
 
 ## Features
 
