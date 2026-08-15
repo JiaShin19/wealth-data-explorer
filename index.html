@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+
+        <title>Wealth Data Explorer</title>
+		<link type="text/css" rel="stylesheet" href="main.css">
+        <script src="https://accounts.google.com/gsi/client" async></script>
+	</head>
+
+	<body>
+        <!-- Login Page -->
+        <section id="login-page">
+            <div class="login-card">
+                <h1>Wealth Data Explorer</h1>
+                <p>
+                    Sign in with your Google account 
+                </p>
+
+                <button id="google-login-button" type="button" disabled>
+                    Sign in with Google
+                </button>
+
+                <p id="login-status">Loading Google Sign-In...</p>
+            </div>
+        </section>
+
+		<main id="visualisation-page" class="hidden">
+            <div id="info">
+                Wealth Data Explorer - Interactive 3D Visualisation of Wealth Data.
+            </div>
+
+            <div id="container"></div>
+            
+            <div id="menu">
+                <div class="menu-buttons">
+                    <button id="table">TABLE</button>
+                    <button id="sphere">SPHERE</button>
+                    <button id="helix">HELIX</button>
+                    <button id="grid">GRID</button>
+                </div>
+                
+                <div class="net-worth-legend">
+                    <span class="legend-label">LOW</span>
+                    <span class="legend-scale" title="Red: below $100,000; Orange: $100,000–$199,999; Green: $200,000 and above"></span><div>
+                    <span class="legend-label">HIGH</span>
+                </div>
+            </div>
+
+        </main>
+
+		<script type="importmap">
+			{
+				"imports": {
+					"three": "https://cdn.jsdelivr.net/npm/three@0.180.0/build/three.module.js",
+					"three/addons/": "https://cdn.jsdelivr.net/npm/three@0.180.0/examples/jsm/"
+				}
+			}
+		</script>
+
+		<script type="module" src="./visualisation.js"></script>
+
+        <script type="module" src="./sheets.js"></script>
+        
+		<script type="module" src="./auth.js"></script>
+	</body>
+</html>
