@@ -9,7 +9,7 @@ let controls;
 let visualisationStarted = false; 
 
 const objects = [];
-const targets = { table: [], sphere: [], helix: [], grid: [], tetrahedron: [] };
+const targets = { table: [], sphere: [], doubleHelix: [], grid: [], tetrahedron: [] };
 
 
 document.addEventListener("sheet-data-loaded", function (event) {
@@ -173,7 +173,6 @@ function init(people) {
     }
 
 
-    // helix
     // DOUBLE HELIX 
 
     const helixVector = new THREE.Vector3();
@@ -213,7 +212,7 @@ function init(people) {
 
         helixObject.lookAt( helixVector );
 
-        targets.helix.push( helixObject );
+        targets.doubleHelix.push( helixObject );
     }
 
 
@@ -370,8 +369,8 @@ function init(people) {
         transform(targets.sphere, 2000);
     });
 
-    document.getElementById("helix").addEventListener("click", function () {
-        transform(targets.helix, 2000);
+    document.getElementById("double-helix").addEventListener("click", function () {
+        transform(targets.doubleHelix, 2000);
     });
 
     document.getElementById("grid").addEventListener("click", function () {
