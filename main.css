@@ -229,8 +229,6 @@ button {
 }
 
 .element:hover {
-	/* border-color: rgba(255,255,255,0.9);
-	box-shadow: 0px 0px 18px rgba(0,255,255,0.8); */
 	filter: brightness(1.12);
 }
 
@@ -253,29 +251,17 @@ button {
 
 /* Top left */
 .element .person-country {
-	/* position: absolute;
-	top: 12px;
-	left: 12px;
-
-	font-size: 8px;
-	color: rgba(255,255,255,0.9); */
 	text-align: left;
 }
 
 /* Top right */
 .element .person-age {
-	/* position: absolute;
-	top: 12px;
-	right: 12px;
-
-	font-size: 8px;
-	color: rgba(255,255,255,0.9); */
 	text-align: right;
 }
 
 .element .person-photo {
 	width: 100%; 
-	height: max-width;
+	aspect-ratio: 1 / 1;
 	box-sizing: border-box;
 
 	display: flex; 

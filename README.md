@@ -2,7 +2,7 @@
 
 Wealth Data Explorer is an interactive 3D webpage that retrieves person and wealth information from Google Sheets.
 
-The project is adapted from the Three.js CSS3D Periodic Table example. The original chemical-element data has been replaced with person records containing a country, age, photo, name, interest, and net worth.
+The project is adapted from the Three.js CSS3D Periodic Table example. The original chemical-element data has been replaced with person records containing a country, age, photo, name, interest, and net worth. A new button for Tetrahedron (4-face pyramid) is introduced, allowing the view of person wealth information in not only Table, Sphere, Helix, Grid, but also Tetrahedron. 
 
 ## Live Website
 

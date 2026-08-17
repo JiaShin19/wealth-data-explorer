@@ -9,7 +9,7 @@ let controls;
 let visualisationStarted = false; 
 
 const objects = [];
-const targets = { table: [], sphere: [], helix: [], grid: [] };
+const targets = { table: [], sphere: [], helix: [], grid: [], tetrahedron: [] };
 
 
 document.addEventListener("sheet-data-loaded", function (event) {
@@ -235,6 +235,122 @@ function init(people) {
         targets.grid.push( gridObject );
     }
     
+
+    // 4-face pyramid (tetrahedron) 
+
+    const baseRadius = 950; 
+    const pyramidHeight = 1500; 
+
+    const apexY = pyramidHeight * 0.75; 
+    const baseY = -pyramidHeight * 0.25; 
+
+    const pyramidVertices = [
+        // top point 
+        new THREE.Vector3(0, apexY, 0), 
+
+        // bottom left / front 
+        new THREE.Vector3(-baseRadius * 0.866, baseY, baseRadius *0.5), 
+        
+        // bottom right / front
+        new THREE.Vector3(baseRadius * 0.866, baseY, baseRadius * 0.5),
+
+        // back point 
+        new THREE.Vector3(0, baseY, -baseRadius)
+    ];
+
+    const pyramidFaces = [
+        [0, 1, 2],
+        [0, 2, 3],
+        [0, 3, 1],
+        [1, 3, 2]
+    ]
+
+    for (let i = 0; i < objects.length; i++) {
+        const faceIndex = i % pyramidFaces.length;
+        const positionOnFace = Math.floor(i / pyramidFaces.length);
+        const positionsOnFace = Math.ceil((objects.length - faceIndex) / pyramidFaces.length);
+
+        const face = pyramidFaces[faceIndex];
+        const vertexA = pyramidVertices[face[0]]; 
+        const vertexB = pyramidVertices[face[1]];
+        const vertexC = pyramidVertices[face[2]];
+
+        const gridRows = 10; 
+
+        const totalGridPositions = (gridRows * (gridRows + 1)) / 2; 
+
+        const gridIndex = Math.floor(positionOnFace * totalGridPositions / positionsOnFace);
+        
+        let triangleRow = 0; 
+        let rowStartIndex = 0; 
+
+        while (gridIndex >= rowStartIndex + triangleRow + 1) {
+            rowStartIndex += triangleRow + 1; 
+            triangleRow++; 
+        }
+
+        const positionInRow = gridIndex - rowStartIndex; 
+
+        let weightA; 
+        let weightB; 
+        let weightC; 
+
+        if (triangleRow === 0) {
+            weightA = 1; 
+            weightB = 0; 
+            weightC = 0; 
+        } else {
+            const rowProgress = triangleRow / (gridRows - 1); 
+
+            const columnProgress = positionInRow / triangleRow; 
+
+            weightA = 1 - rowProgress; 
+            weightB = rowProgress * (1 - columnProgress); 
+            weightC = rowProgress * columnProgress; 
+        }
+
+        const edgeInset = 0.035; 
+        const remainingWeight = 1 - 3 * edgeInset; 
+
+        weightA = weightA * remainingWeight + edgeInset;
+        weightB = weightB * remainingWeight + edgeInset;
+        weightC = weightC * remainingWeight + edgeInset; 
+
+        const tetrahedronObject = new THREE.Object3D();
+
+        tetrahedronObject.scale.setScalar(0.72);
+
+        tetrahedronObject.position
+            .copy(vertexA)
+            .multiplyScalar(weightA)
+            .addScaledVector(vertexB, weightB)
+            .addScaledVector(vertexC, weightC);
+
+        // Calculate the outward direction of the current surface 
+        const edgeAB = new THREE.Vector3().subVectors(vertexB, vertexA);
+        const edgeAC = new THREE.Vector3().subVectors(vertexC, vertexA);
+        const faceNormal = new THREE.Vector3().crossVectors(edgeAB, edgeAC).normalize();
+
+        const faceCentre = new THREE.Vector3()
+            .add(vertexA)
+            .add(vertexB)
+            .add(vertexC)
+            .divideScalar(3);
+
+        if (faceNormal.dot(faceCentre) < 0) {
+            faceNormal.negate();
+        }
+
+        const lookAtPosition = tetrahedronObject.position
+            .clone()
+            .add(faceNormal.clone().multiplyScalar(1000));
+
+        tetrahedronObject.lookAt(lookAtPosition);
+
+        targets.tetrahedron.push(tetrahedronObject);
+    }
+
+
     renderer = new CSS3DRenderer();
     renderer.setSize( window.innerWidth, window.innerHeight );
     document.getElementById( 'container' ).appendChild( renderer.domElement );
@@ -262,6 +378,10 @@ function init(people) {
         transform(targets.grid, 2000);
     });
 
+    document.getElementById("tetrahedron").addEventListener("click", function () {
+        transform(targets.tetrahedron, 2000);
+    });
+    
     window.addEventListener( 'resize', onWindowResize );
 
 }
@@ -301,6 +421,10 @@ function transform( layoutTargets, duration ) {
             .easing( TWEEN.Easing.Exponential.InOut )
             .start();
 
+        new TWEEN.Tween( object.scale )
+            .to( { x: target.scale.x, y: target.scale.y, z: target.scale.z }, Math.random() * duration + duration )
+            .easing( TWEEN.Easing.Exponential.InOut )
+            .start();
     }
 
     new TWEEN.Tween({})
